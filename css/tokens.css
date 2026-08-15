@@ -1,0 +1,34 @@
+/* Design tokens extracted from ⓂCCE-Assessments via Figma MCP.
+   Source of truth: DS style names noted per token. Do not hand-tune. */
+:root {
+  /* Color */
+  --blue-base: #087DAE;        /* Blue/Base 087DAE · Text/Info · Icon/Primary */
+  --white: #FFFFFF;            /* Gray/White · Text/White · Icon/White */
+  --text-primary: #21272A;     /* Text/Primary (verify at next extraction) */
+  --black: #000000;
+
+  /* Disabled + secondary states: placeholders until P2 extraction.
+     TODO(P2): replace with exact values from 4726:333 get_design_context. */
+  --btn-disabled-bg: #EEEEF2;
+  --btn-disabled-text: #9A9DA3;
+
+  /* Type: IBM Plex Sans throughout */
+  --font: "IBM Plex Sans", -apple-system, sans-serif;
+
+  /* Heading/H1-Med */
+  --h1-size: 36px; --h1-weight: 500; --h1-lh: 56px; --h1-ls: 0.4px;
+  /* Body on blue screens (node 1000:5) */
+  --body-lg-size: 24px; --body-lg-lh: 30px; --body-lg-ls: 0.2px;
+  /* Subtitle 1/Reg (app bar) */
+  --sub1-size: 18px; --sub1-lh: 22px; --sub1-ls: 0.15px;
+  /* Button/Large */
+  --btn-size: 18px; --btn-lh: 23px; --btn-ls: 0.4px;
+
+  /* Layout: iPad 11 portrait logical points, per Figma frames 834x1194 */
+  --stage-w: 834px;
+  --stage-h: 1194px;
+  --margin: 24px;
+
+  /* Behavior config (eng-tunable) */
+  --toast-delay: 15000ms; /* documented; actual value lives in js CFG */
+}

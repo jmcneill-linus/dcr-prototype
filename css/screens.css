@@ -1,0 +1,185 @@
+/* ---------- Karaoke: words fill blue while spoken, settle to black when audio ends ---------- */
+.karaoke span { transition: color 120ms linear; }
+.karaoke span.spoken { color: var(--blue-base); }
+.karaoke.settled span { color: inherit; }
+
+/* ---------- P0 · Tap-to-begin gate (build-only, neutral) ---------- */
+.s-gate { background: var(--white); align-items: center; justify-content: center; }
+.s-gate .gate-inner { display: flex; flex-direction: column; align-items: center; gap: 32px; padding: 0 96px; text-align: center; }
+.s-gate h1 { font-size: var(--h1-size); font-weight: var(--h1-weight); line-height: var(--h1-lh); letter-spacing: var(--h1-ls); color: var(--text-primary); }
+.s-gate p { font-size: var(--body-lg-size); line-height: var(--body-lg-lh); letter-spacing: var(--body-lg-ls); color: var(--text-primary); }
+
+/* ---------- P1 · Blue Instructions (AS-IS · Figma 1000:3) ---------- */
+.s-blue-instructions { background: var(--blue-base); color: var(--white); }
+.s-blue-instructions .appbar .bar-name { color: var(--white); }
+.s-blue-instructions .ic-steps { position: absolute; top: 350px; left: 338px; width: 150px; height: 150px; }
+.s-blue-instructions h1 {
+  position: absolute; top: 500px; left: 5.76%; right: 6.71%;
+  font-size: var(--h1-size); font-weight: var(--h1-weight); line-height: var(--h1-lh);
+  letter-spacing: var(--h1-ls); text-align: center;
+}
+.s-blue-instructions .body {
+  position: absolute; top: 576px; left: 5.76%; right: 6.71%;
+  font-size: var(--body-lg-size); line-height: var(--body-lg-lh); letter-spacing: var(--body-lg-ls);
+}
+.s-blue-instructions .body p + p { margin-top: var(--body-lg-lh); }
+.s-blue-instructions .action {
+  position: absolute; top: 1067px; left: 24px; width: 786px;
+  display: flex; justify-content: center;
+}
+
+/* ---------- Shared patient-screen chassis (Figma: bg F9F9F9, white card, sq top-right) ---------- */
+.s-flow { background: #F9F9F9; }
+.card {
+  position: absolute; left: 24px; width: 786px; background: var(--white);
+  border-radius: 20px; border-top-right-radius: 0;
+  display: flex; flex-direction: column;
+}
+.appbar2 { /* extracted app bar: top 40, h 68, px 24, 3 zones */
+  position: absolute; top: 40px; left: 0; width: 834px; height: 68px;
+  display: flex; align-items: center; padding: 0 24px; gap: 8px; z-index: 5;
+}
+.appbar2 .zone { flex: 1 0 0; min-width: 1px; display: flex; align-items: center; }
+.appbar2 .zone.center { flex-direction: column; justify-content: center; gap: 8px; }
+.appbar2 .zone.right { justify-content: flex-end; gap: 8px; }
+.appbar2 .patient { font-size: 18px; font-weight: 500; line-height: 22px; letter-spacing: 0.15px; color: var(--text-primary); white-space: nowrap; }
+.appbar2 .settings { font-size: 18px; line-height: 22px; letter-spacing: 0.15px; color: var(--text-primary); white-space: nowrap; }
+.appbar2 img.burger { width: 32px; height: 32px; padding: 8px 4px; box-sizing: border-box; }
+
+/* Audio status: pill + progress (DS-true variant from 4726:337) */
+.audio-status { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.audio-pill {
+  display: flex; align-items: center; gap: 8px; padding: 8px 16px 8px 14px;
+  background: #EEF8FF; border-radius: 20px;
+}
+.audio-pill .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--blue-base); }
+.audio-pill .label { font-size: 18px; font-weight: 600; line-height: 23px; letter-spacing: 0.4px; color: var(--blue-base); white-space: nowrap; }
+.audio-progress { width: 213px; height: 6px; border-radius: 3px; background: #B1E5FB; overflow: hidden; }
+.audio-progress .fill { height: 6px; border-radius: 3px; background: var(--blue-base); width: 0; transition: width 300ms linear; }
+
+/* Floating audio status below app bar (Welcome/IR position, top 112) */
+.audio-float { position: absolute; top: 112px; left: 0; width: 834px; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 5; }
+
+/* Replay chip (finished state) — normalized to DS type/color */
+.replay-chip {
+  display: none; align-items: center; gap: 8px; color: var(--blue-base);
+  font-size: 18px; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.replay-chip .glyph { font-size: 20px; }
+.audio-done .replay-chip { display: flex; }
+.audio-done .audio-status { display: none; }
+
+/* ---------- Instruction screens (Welcome + IR) ---------- */
+.s-instructions .card { top: 184px; height: 957px; padding: 32px; justify-content: space-between; align-items: center; }
+.s-instructions .paras { display: flex; flex-direction: column; gap: 32px; width: 100%; }
+.s-instructions .paras p {
+  font-size: 36px; font-weight: 300; line-height: 56px; letter-spacing: 0.4px; color: var(--text-primary);
+}
+.s-instructions .bottom { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.s-instructions .helper { width: 388px; text-align: center; font-size: 21px; line-height: 26px; letter-spacing: 0.2px; color: #80808C; }
+
+/* ---------- Pencil check ---------- */
+.s-pencil .card { top: 112px; height: 1030px; padding: 56px; gap: 56px; justify-content: center; }
+.s-pencil .prompt { display: flex; flex-direction: column; gap: 36px; }
+.s-pencil .prompt p { font-size: 36px; font-weight: 300; line-height: 56px; letter-spacing: 0.4px; color: var(--text-primary); width: 674px; }
+.draw-area {
+  position: relative; flex: 1 0 0; width: 100%; border: 1.5px solid var(--blue-base);
+  border-radius: 16px; background: rgba(238, 248, 255, 0.3); overflow: hidden;
+  touch-action: none;
+}
+.draw-area .placeholder {
+  position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
+  font-size: 21px; line-height: 26px; letter-spacing: 0.2px; color: var(--text-primary); pointer-events: none;
+}
+.draw-area canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.s-pencil .action { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; }
+.s-pencil .btn-caption { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.s-pencil .helper { font-size: 21px; line-height: 26px; letter-spacing: 0.2px; color: #676671; }
+
+/* ---------- Listen screen (as-is, blue pulse) ---------- */
+.s-listen .card { top: 111px; height: 1030px; padding: 100px 32px 32px; align-items: center; }
+.pulse-stack { position: relative; width: 250px; height: 250px; }
+.pulse-stack img.ring { position: absolute; display: block; }
+.pulse-stack .icon {
+  position: absolute; width: 113px; height: 113px; left: 68.5px; top: 69.5px;
+  /* leaf-in-box: mic glyph insets 16.67% t/b, 27.78% l, 29.58% r (Figma Union) */
+  padding: 18.8px 33.4px 18.8px 31.4px; box-sizing: border-box;
+}
+.s-listen .caption { margin-top: 12px; width: 334px; text-align: center; font-size: 36px; font-weight: 300; line-height: 56px; letter-spacing: 0.4px; color: var(--text-primary); }
+@keyframes gentle-pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
+.pulse-stack .ring.r2 { animation: gentle-pulse 2.2s ease-in-out infinite; }
+.pulse-stack .ring.r1 { animation: gentle-pulse 2.2s ease-in-out 0.3s infinite; }
+
+/* ---------- Recording screens (IR + DR) ---------- */
+.s-recording .card { top: 111px; height: 1030px; padding: 100px 32px 32px; justify-content: space-between; align-items: center; }
+.s-recording .top-group { display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.s-recording h1 { font-size: 36px; font-weight: 500; line-height: 56px; letter-spacing: 0.4px; text-align: center; color: var(--text-primary); }
+.s-recording .subline { font-size: 36px; font-weight: 300; line-height: 56px; letter-spacing: 0.4px; text-align: center; color: var(--text-primary); width: 722px; }
+.s-recording .bottom { display: flex; flex-direction: column; align-items: center; gap: 39px; }
+
+/* Toast-Web (1033:456) */
+.toast {
+  display: none; width: 448px; background: #B1E5FB; border: 1px solid var(--blue-base);
+  border-radius: 8px; border-top-right-radius: 0; overflow: hidden;
+  filter: drop-shadow(0 2px 5px rgba(23, 24, 32, 0.1));
+}
+.toast.shown { display: flex; animation: toast-in 450ms cubic-bezier(0.2, 0.7, 0.3, 1); }
+@keyframes toast-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.toast .sidebar { width: 8px; align-self: stretch; background: var(--blue-base); border-radius: 20px 0 0 20px; }
+.toast .content { flex: 1; display: flex; align-items: center; gap: 8px; padding: 13px 16px; }
+.toast .content img { width: 32px; height: 32px; padding: 4px; box-sizing: border-box; }
+.toast .content p { font-size: 16px; line-height: 19px; letter-spacing: 0.5px; color: var(--text-primary); }
+
+/* Nudge ring + glow around the pulsing Done (1055:264) */
+.nudge-wrap { position: relative; display: inline-flex; }
+.nudge-ring {
+  position: absolute; inset: -6px; border: 2px solid #087DAD; border-radius: 34px;
+  opacity: 0; pointer-events: none;
+  filter: drop-shadow(0 0 12px rgba(8, 125, 173, 0.35)) drop-shadow(0 0 5px rgba(8, 125, 173, 0.7));
+}
+@keyframes nudge-pulse { 0%,100% { opacity: 0; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1); } }
+.nudge-wrap.pulsing .nudge-ring { animation: nudge-pulse 1.6s ease-in-out 3; }
+
+/* ---------- Clock canvases ---------- */
+.s-clock .card { left: 54px; width: 726px; top: 111px; padding: 32px; align-items: center; }
+.s-clock.as-is .card { height: 924px; }
+.s-clock.designed .card { height: 1030px; justify-content: space-between; }
+.s-clock img.printed-clock { width: 324px; height: 324px; }
+.s-clock .clock-draw { position: relative; flex: 1 0 0; width: 100%; touch-action: none; }
+.s-clock .clock-draw canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.s-clock .bottom-right { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; width: 100%; }
+.s-clock .helper { font-size: 21px; line-height: 26px; letter-spacing: 0.2px; color: #676671; text-align: right; }
+/* as-is action row lives OUTSIDE the card (1001:167) */
+.s-clock .action-out { position: absolute; top: 1051px; left: 24px; width: 786px; display: flex; justify-content: flex-end; padding: 16px 24px 48px; box-sizing: border-box; }
+.s-clock .toast-slot { display: flex; justify-content: center; width: 100%; margin-bottom: 8px; }
+
+/* ---------- Modal overlay (as-is clock listen: dim + card) ---------- */
+.dim-overlay {
+  position: absolute; inset: 0; background: rgba(23, 24, 32, 0.55); z-index: 20;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 350ms ease; opacity: 1;
+}
+.dim-overlay.hidden { opacity: 0; pointer-events: none; }
+/* command-canvas toast floats above the external action row */
+.s-clock .toast-out { position: absolute; top: 968px; left: 24px; width: 786px; display: flex; justify-content: center; }
+.modal-card {
+  background: var(--white); border-radius: 8px; padding: 44px 48px; min-width: 596px;
+  display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center;
+  box-shadow: 0 2px 10px rgba(23, 24, 32, 0.2);
+}
+.modal-card .modal-title { font-size: 24px; font-weight: 500; line-height: 30px; letter-spacing: 0.2px; color: var(--blue-base); }
+.modal-card .modal-body { font-size: 21px; line-height: 26px; letter-spacing: 0.2px; color: var(--text-primary); }
+.modal-card .modal-actions { display: flex; gap: 24px; }
+
+/* ---------- Saving + Done (as-is wrap) ---------- */
+.s-saving-card { min-width: 500px; max-width: 560px; gap: 24px; }
+.s-saving-card .modal-title { color: var(--text-primary); }
+.s-saving-card .modal-body { font-size: 18px; line-height: 26px; }
+.asset-pending {
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px dashed #BBBAC0; border-radius: 12px; color: #92919B; font-size: 14px;
+}
+.s-alldone .card { top: 111px; height: 1030px; padding: 100px 32px 48px; align-items: center; justify-content: space-between; }
+.s-alldone .middle { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.s-alldone h1 { font-size: 36px; font-weight: 500; line-height: 56px; letter-spacing: 0.4px; color: var(--blue-base); }
+.s-alldone .sub { font-size: 24px; line-height: 30px; letter-spacing: 0.2px; color: var(--text-primary); }

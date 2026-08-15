@@ -1,0 +1,62 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; background: #1a1a1a; overflow: hidden; }
+body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
+
+/* Stage: fixed 834x1194 logical canvas, scaled to fit the real viewport */
+#viewport { height: 100%; display: flex; align-items: center; justify-content: center; }
+#stage {
+  width: var(--stage-w); height: var(--stage-h);
+  position: relative; overflow: hidden; background: var(--white);
+  transform-origin: center center;
+}
+
+/* Screens slide horizontally (current state: new screen slides in from right) */
+.screen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  background: var(--white);
+  transition: transform 420ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  transform: translateX(0);
+  touch-action: manipulation;
+}
+.screen.enter-right { transform: translateX(100%); }
+.screen.exit-left   { transform: translateX(-100%); }
+
+/* ---------- Top app bar (patient screens) ---------- */
+.appbar {
+  position: absolute; top: 43px; left: var(--margin); right: var(--margin);
+  display: flex; align-items: center; gap: 8px; padding: 8px 0;
+  z-index: 5;
+}
+.appbar .bar-name {
+  flex: 1 0 0; display: flex; justify-content: flex-end; align-items: center;
+  font-size: var(--sub1-size); line-height: var(--sub1-lh); letter-spacing: var(--sub1-ls);
+}
+/* Icon boxes: preserve Figma outer box + inner glyph (leaf) dims separately.
+   ic-close: 16px glyph in 32px box. btn arrow: 14.3x11.4 glyph in 24px box. */
+.appbar img.bar-icon { width: 32px; height: 32px; padding: 8px; box-sizing: border-box; display: block; }
+
+/* ---------- Buttons (DS pill, Button/Large) ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 56px; min-width: 213px; padding: 14px 32px;
+  border-radius: 30px; border: 2px solid transparent;
+  font-family: var(--font); font-size: var(--btn-size); line-height: var(--btn-lh);
+  letter-spacing: var(--btn-ls); font-weight: 400;
+  cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.btn img { display: block; width: 24px; height: 24px; padding: 6.3px 4.85px; box-sizing: border-box; }
+.btn-primary img { filter: brightness(0) invert(1); } /* arrow glyph renders white on blue */
+.btn-primary   { background: var(--blue-base); color: var(--white); border-color: var(--blue-base); }
+.btn-secondary { background: var(--white); color: var(--blue-base); border-color: var(--blue-base); }
+/* aria-disabled instead of [disabled] so taps still fire for logging + helper reveal */
+.btn[aria-disabled="true"] {
+  background: var(--btn-disabled-bg); color: var(--btn-disabled-text); border-color: var(--btn-disabled-bg);
+  cursor: default;
+}
+
+/* ---------- Helper caption (persists once revealed) ---------- */
+.helper { font-size: 16px; color: var(--btn-disabled-text); visibility: hidden; }
+.helper.shown { visibility: visible; }
+
+/* ---------- Home indicator: provided by real iPad hardware; omitted on purpose ---------- */
