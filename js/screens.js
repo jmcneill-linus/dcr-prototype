@@ -84,10 +84,10 @@ function sweepProgress(screenEl, durationMs) {
 
 /* =================================================================
    P0 · Tap-to-begin gate (build-only)
-   [MAZE SYNC] Opening copy must match the final Maze mission instructions
-   (see matching note on the 'end' screen). Must include a heads-up that the
-   voice is a temporary computer voice (team decision 2026-08-14: interim
-   voice OK for testing IF participants are warned in advance).
+   [MAZE SYNC] RESOLVED 2026-08-15: the computer-voice heads-up + sound-on
+   instruction now live in the Maze welcome and scenario blocks, which both
+   precede this screen ("Tap Begin on the first screen with your sound on").
+   This gate stays minimal on purpose. If Maze copy changes, re-check here.
 ================================================================= */
 register('p0', (el) => {
   el.classList.add('s-gate');
@@ -451,16 +451,16 @@ register('alldone', (el) => {
 });
 
 /* ---------- End card (Maze exit) ----------
-   [MAZE SYNC] This closing copy and P0's opening copy must be written against
-   the final Maze mission instructions so the prototype and Maze context hand
-   off cleanly (what the participant was told before, what they do after).
-   Revisit both during the research-plan update + Maze instrumentation pass. */
+   [MAZE SYNC] RESOLVED 2026-08-15 against the built Maze study: the mission
+   tells participants to close this window, return to the study tab, and press
+   End task; this copy tells them to close the window and return to the survey.
+   If the Maze mission wording changes, re-sync here. */
 register('end', (el) => {
   el.classList.add('s-gate');
   el.innerHTML = `
     <div class="gate-inner">
       <h1>This is the end of the test.</h1>
-      <p>Thank you for participating. Please return to the instructions for what to do next.</p>
+      <p>Thank you for participating. You can now close this window and return to the survey to answer a few questions.</p>
     </div>`;
   return {};
 });
