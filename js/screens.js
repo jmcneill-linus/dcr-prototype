@@ -307,7 +307,7 @@ function recordingScreen({ id, heading, script, nextId }) {
         <div class="bottom">
           ${toastHTML("If you're finished, tap the Done button below.")}
           <div class="btn-caption">
-            <span class="helper" id="${id}-helper">You can tap Done when the instructions are finished playing</span>
+            <span class="helper" id="${id}-helper">Complete task to move forward.</span>
             <div class="nudge-wrap">
               <button class="btn btn-secondary" id="${id}-done" style="width:220px">Done</button>
               <div class="nudge-ring"></div>
