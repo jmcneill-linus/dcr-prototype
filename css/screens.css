@@ -116,6 +116,8 @@
 .s-recording h1 { font-size: 36px; font-weight: 500; line-height: 56px; letter-spacing: 0.4px; text-align: center; color: var(--text-primary); }
 .s-recording .subline { font-size: 36px; font-weight: 300; line-height: 56px; letter-spacing: 0.4px; text-align: center; color: var(--text-primary); width: 722px; }
 .s-recording .bottom { display: flex; flex-direction: column; align-items: center; gap: 39px; }
+.s-recording .btn-caption { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.s-recording .helper { font-size: 21px; line-height: 26px; letter-spacing: 0.2px; color: #676671; text-align: center; }
 
 /* Toast-Web (1033:456) */
 .toast {

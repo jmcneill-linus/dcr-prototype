@@ -289,8 +289,9 @@ register('ir-listen', (el) => {
 
 /* =================================================================
    Recording screens factory (IR P10-11 + DR P16)
-   NEW · 1024:228 / 1153:1318 / 1027:227. Done: secondary, tappable from
-   load; 15s timer from load fires toast + primary + nudge ring.
+   NEW · 1024:228 / 1153:1318 / 1027:227. Done starts DISABLED and unlocks
+   2s after the audio finishes (Justin 2026-08-18; was tappable-from-load);
+   disabled taps reveal the helper. The 15s toast timer arms at unlock.
 ================================================================= */
 function recordingScreen({ id, heading, script, nextId }) {
   register(id, (el) => {
@@ -305,9 +306,12 @@ function recordingScreen({ id, heading, script, nextId }) {
         </div>
         <div class="bottom">
           ${toastHTML("If you're finished, tap the Done button below.")}
-          <div class="nudge-wrap">
-            <button class="btn btn-secondary" id="${id}-done" style="width:220px">Done</button>
-            <div class="nudge-ring"></div>
+          <div class="btn-caption">
+            <span class="helper" id="${id}-helper">You can tap Done when the instructions are finished playing</span>
+            <div class="nudge-wrap">
+              <button class="btn btn-secondary" id="${id}-done" style="width:220px">Done</button>
+              <div class="nudge-ring"></div>
+            </div>
           </div>
         </div>
       </div>`);
@@ -320,13 +324,22 @@ function recordingScreen({ id, heading, script, nextId }) {
       wrap.classList.add('pulsing');
       log('toast_shown', { screen: id, provoked: false });
     });
-    doneBtn.addEventListener('click', () => { timer.cancel(); log('done_tap', { screen: id }); go(nextId); });
+    const g = gate(doneBtn, el.querySelector(`#${id}-helper`), id);
+    g.onUnlockedTap = () => { timer.cancel(); log('done_tap', { screen: id }); go(nextId); };
     // Audio speaks the heading, then the subline (Justin 2026-08-15: the
-    // "When you're finished..." line must be heard, not just shown).
+    // "When you're finished..." line must be heard, not just shown). Done
+    // unlocks a beat after the audio ends; the toast countdown starts then.
     return {
       enter() {
-        Audio.speak(script, { onEnd: () => Audio.speak("When you're finished, tap the Done button.", {}) });
-        timer.start();
+        Audio.speak(script, {
+          onEnd: () => Audio.speak("When you're finished, tap the Done button.", {
+            onEnd: () => setTimeout(() => {
+              g.unlock();
+              log('audio_end', { screen: id });
+              timer.start();
+            }, CFG.doneDelayMs),
+          }),
+        });
       },
       exit() { timer.cancel(); },
     };

@@ -17,6 +17,7 @@ export const CFG = {
   tailMs: 500,                              // synthetic-mode pause after last word
   endPadMs: 120,                            // real-clip pause after file ends before onEnd
   toastMs: params.has('fast') ? 3500 : 15000, // inactivity threshold for toast + pulse (Justin: 15s)
+  doneDelayMs: params.has('fast') ? 600 : 2000, // recording screens: Done unlocks this long after audio ends (Justin 2026-08-18)
   useVoice: !params.has('mute') && !params.has('fast'), // ?mute disables sound
 };
 
@@ -34,10 +35,15 @@ if (CFG.useVoice) {
 }
 
 let currentRun = null;
-let fadeSeq = 0; // invalidates in-flight fades when the element is reused
+let fadeSeq = 0;
 
+// The fade token lives ON the element: a fade may only be abandoned when THIS
+// element is reclaimed by a new run (resetPlayer pauses it anyway). A global
+// token let any new clip abort another element's in-flight fade before it
+// reached pause(), so the old clip kept playing underneath the new one
+// (Justin's overlap report, 2026-08-18).
 function resetPlayer(player) {
-  fadeSeq += 1;
+  player._fadeToken = ++fadeSeq;
   player.pause();
   player.currentTime = 0;
   player.volume = 1;
@@ -47,10 +53,9 @@ function stopPlayback(player, fade) {
   if (!player) return;
   if (!fade || player.paused) { resetPlayer(player); return; }
   // Justin: early advance FADES audio out, never hard-cuts.
-  fadeSeq += 1;
-  const token = fadeSeq;
+  const token = (player._fadeToken = ++fadeSeq);
   const step = () => {
-    if (token !== fadeSeq) return; // element was reclaimed by a new run
+    if (player._fadeToken !== token) return; // this element was restarted on purpose
     if (player.volume > 0.08) {
       player.volume = Math.max(0, player.volume - 0.08);
       setTimeout(step, 30);
@@ -137,4 +142,6 @@ export const Audio = {
 
   // stop(fade) — fade=true on early advance (Justin: fade out, never hard-cut).
   stop(fade = true) { cancelRun(fade); },
+
+  _players: players, // dev-verification hook (playback states); not used by screens
 };
