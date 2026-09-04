@@ -12,6 +12,39 @@
 <link rel="stylesheet" href="css/screens.css">
 </head>
 <body>
+<!-- Client-side password gate (standard for jmcneill-linus deployments). Added
+     2026-09-03 after fieldwork closed; casual protection only, not security. -->
+<div id="gate" style="position:fixed;inset:0;z-index:9999;background:#171820;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#fff;">
+  <form id="gate-form" style="display:flex;flex-direction:column;gap:12px;align-items:center;width:min(320px,90vw);">
+    <div style="font-size:18px;font-weight:500;">DCR Prototype</div>
+    <div style="font-size:14px;color:#b9bac4;">Enter the password to continue.</div>
+    <input id="gate-pw" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4b58;background:#22232d;color:#fff;font-size:16px;" aria-label="Password">
+    <button type="submit" style="width:100%;padding:12px;border-radius:30px;border:0;background:#087DAE;color:#fff;font-size:16px;cursor:pointer;">Enter</button>
+    <div id="gate-msg" style="font-size:13px;color:#ff8a8a;min-height:16px;" aria-live="polite"></div>
+  </form>
+</div>
+<script>
+(function () {
+  var KEY = 'dcr-gate-ok';
+  var gate = document.getElementById('gate');
+  try { if (localStorage.getItem(KEY) === '1') gate.remove(); } catch (e) {}
+  var form = document.getElementById('gate-form');
+  if (form && gate && gate.parentNode) {
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var v = (document.getElementById('gate-pw').value || '').trim();
+      if (v === 'DACPencil26') {
+        try { localStorage.setItem(KEY, '1'); } catch (e) {}
+        gate.remove();
+      } else {
+        document.getElementById('gate-msg').textContent = 'That password is not right. Try again.';
+        document.getElementById('gate-pw').select();
+      }
+    });
+    setTimeout(function () { var i = document.getElementById('gate-pw'); if (i) i.focus(); }, 50);
+  }
+})();
+</script>
 <div id="viewport">
   <div id="stage"></div>
 </div>
